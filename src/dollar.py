@@ -1,10 +1,6 @@
-from __future__ import annotations
-
-from pydantic import BaseModel
+from src.money import Money
 
 
-class Dollar(BaseModel):
-    amount: int
-
-    def times(self, multiplier: int) -> Dollar:
+class Dollar(Money):
+    def times(self, multiplier: int) -> "Dollar":
         return Dollar(amount=self.amount * multiplier)
