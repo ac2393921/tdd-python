@@ -1,20 +1,24 @@
-from src.dollar import Dollar
-from src.franc import Franc
+from src.money import Money
 
 
 def test_multiplication():
-    five: Dollar = Dollar(amount=5)
-    assert Dollar(amount=10) == five.times(2)
-    assert Dollar(amount=15) == five.times(3)
+    five: Money = Money.dollar(amount=5)
+    assert Money.dollar(amount=10) == five.times(2)
+    assert Money.dollar(amount=15) == five.times(3)
 
 
 def test_equality():
-    assert Dollar(amount=5) == Dollar(amount=5)
-    assert Dollar(amount=5) != Dollar(amount=6)
-    assert Franc(amount=5) != Dollar(amount=5)
+    assert Money.dollar(amount=5) == Money.dollar(amount=5)
+    assert Money.dollar(amount=5) != Money.dollar(amount=6)
+    assert Money.franc(amount=5) != Money.dollar(amount=5)
 
 
 def testFrancMultiplication():
-    five: Franc = Franc(amount=5)
-    assert Franc(amount=10) == five.times(2)
-    assert Franc(amount=15) == five.times(3)
+    five: Money = Money.franc(amount=5)
+    assert Money.franc(amount=10) == five.times(2)
+    assert Money.franc(amount=15) == five.times(3)
+
+
+def test_currency():
+    assert "USD" == Money.dollar(1).currency
+    assert "CHF" == Money.franc(1).currency
