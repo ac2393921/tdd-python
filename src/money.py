@@ -1,9 +1,7 @@
-from abc import ABC, abstractmethod
-
 from pydantic import BaseModel, PrivateAttr
 
 
-class Money(BaseModel, ABC):
+class Money(BaseModel):
     _amount: int = PrivateAttr()
     _currency: str = PrivateAttr()
 
@@ -12,17 +10,17 @@ class Money(BaseModel, ABC):
         self._currency = currency
 
     def __eq__(self, other: "Money") -> bool:
-        return (self._amount == other._amount) and (
-            self.__class__.__name__ == other.__class__.__name__
-        )
+        return (self._amount == other._amount) and (self.currency == other.currency)
+
+    def __str__(self) -> str:
+        return f"{self._amount} {self.currency}"
 
     @property
     def currency(self) -> str:
         return self._currency
 
-    @abstractmethod
     def times(self, multiplier: int) -> "Money":
-        pass
+        return Money(self._amount * multiplier, self._currency)
 
     @staticmethod
     def dollar(amount: int) -> "Money":
