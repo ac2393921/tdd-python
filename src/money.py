@@ -1,7 +1,18 @@
+from __future__ import annotations
+
 from pydantic import BaseModel, PrivateAttr
 
 
-class Money(BaseModel):
+class Expression(BaseModel):
+    pass
+
+
+class Bank:
+    def reduce(self, source: Expression, to: str):
+        return Money.dollar(10)
+
+
+class Money(Expression):
     _amount: int = PrivateAttr()
     _currency: str = PrivateAttr()
 
@@ -9,7 +20,7 @@ class Money(BaseModel):
         self._amount = amount
         self._currency = currency
 
-    def __eq__(self, other: "Money") -> bool:
+    def __eq__(self, other: Money) -> bool:
         return (self._amount == other._amount) and (self.currency == other.currency)
 
     def __str__(self) -> str:
@@ -19,13 +30,16 @@ class Money(BaseModel):
     def currency(self) -> str:
         return self._currency
 
-    def times(self, multiplier: int) -> "Money":
+    def times(self, multiplier: int) -> Money:
         return Money(self._amount * multiplier, self._currency)
 
     @staticmethod
-    def dollar(amount: int) -> "Money":
+    def dollar(amount: int) -> Money:
         return Money(amount, "USD")
 
     @staticmethod
-    def franc(amount: int) -> "Money":
+    def franc(amount: int) -> Money:
         return Money(amount, "CHF")
+
+    def plus(self, addend: Money) -> Expression:
+        return Money(self._amount + addend._amount, self.currency)
