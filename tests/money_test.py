@@ -13,16 +13,6 @@ def test_equality():
     assert Money.franc(amount=5) != Money.dollar(amount=5)
 
 
-def testFrancMultiplication():
-    five: Money = Money.franc(amount=5)
-    assert Money.franc(amount=10) == five.times(2)
-    assert Money.franc(amount=15) == five.times(3)
-
-
 def test_currency():
     assert "USD" == Money.dollar(1).currency
     assert "CHF" == Money.franc(1).currency
-
-
-def test_different_class_equality():
-    assert Money(10, "CHF") == Money(10, "CHF")
