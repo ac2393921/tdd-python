@@ -1,15 +1,8 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, PrivateAttr
+from pydantic import PrivateAttr
 
-
-class Expression(BaseModel):
-    pass
-
-
-class Bank:
-    def reduce(self, source: Expression, to: str):
-        return Money.dollar(10)
+from src.expression import Expression
 
 
 class Money(Expression):
