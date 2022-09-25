@@ -4,10 +4,12 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel, PrivateAttr
 
+from src.exchanger import CurrencyExchanger
+
 
 class Expression(BaseModel, ABC):
     @abstractmethod
-    def reduce(self, to: str) -> Money:
+    def reduce(self, bank: CurrencyExchanger, to: str) -> Money:
         pass
 
 
@@ -35,8 +37,9 @@ class Money(Expression):
 
         return Sum(self, addend)
 
-    def reduce(self, to: str) -> Money:
-        return self
+    def reduce(self, bank: CurrencyExchanger, to: str) -> Money:
+        rate = bank.rate(self.currency, to)
+        return Money(self.amount // rate, to)
 
     @staticmethod
     def dollar(amount: int) -> Money:

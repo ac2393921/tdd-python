@@ -1,5 +1,6 @@
 from pydantic import PrivateAttr
 
+from src.bank import Bank
 from src.money import Money
 
 
@@ -19,6 +20,6 @@ class Sum(Money):
     def addend(self) -> Money:
         return self._addend
 
-    def reduce(self, to: str) -> Money:
+    def reduce(self, bank: Bank, to: str) -> Money:
         amount = self._augend.amount + self._addend.amount
         return Money(amount, to)
