@@ -1,8 +1,14 @@
 from __future__ import annotations
 
-from pydantic import PrivateAttr
+from abc import ABC, abstractmethod
 
-from src.expression import Expression
+from pydantic import BaseModel, PrivateAttr
+
+
+class Expression(BaseModel, ABC):
+    @abstractmethod
+    def reduce(self, to: str) -> Money:
+        pass
 
 
 class Money(Expression):
@@ -13,18 +19,24 @@ class Money(Expression):
         self._amount = amount
         self._currency = currency
 
-    def __eq__(self, other: Money) -> bool:
-        return (self._amount == other._amount) and (self.currency == other.currency)
-
-    def __str__(self) -> str:
-        return f"{self._amount} {self.currency}"
-
     @property
     def currency(self) -> str:
         return self._currency
 
+    @property
+    def amount(self) -> int:
+        return self._amount
+
     def times(self, multiplier: int) -> Money:
         return Money(self._amount * multiplier, self._currency)
+
+    def plus(self, addend: Money) -> Expression:
+        from .sum import Sum
+
+        return Sum(self, addend)
+
+    def reduce(self, to: str) -> Money:
+        return self
 
     @staticmethod
     def dollar(amount: int) -> Money:
@@ -34,5 +46,8 @@ class Money(Expression):
     def franc(amount: int) -> Money:
         return Money(amount, "CHF")
 
-    def plus(self, addend: Money) -> Expression:
-        return Money(self._amount + addend._amount, self.currency)
+    def __eq__(self, other: Money) -> bool:
+        return (self._amount == other._amount) and (self.currency == other.currency)
+
+    def __str__(self) -> str:
+        return f"{self._amount} {self.currency}"

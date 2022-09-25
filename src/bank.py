@@ -1,7 +1,6 @@
-from src.expression import Expression
-from src.money import Money
+from src.money import Expression
 
 
 class Bank:
     def reduce(self, source: Expression, to: str):
-        return Money.dollar(10)
+        return source.reduce(to)
