@@ -9,7 +9,11 @@ from src.exchanger import CurrencyExchanger
 
 class Expression(BaseModel, ABC):
     @abstractmethod
-    def plus(addend: Expression) -> Expression:
+    def times(self, multiplier: int) -> Expression:
+        pass
+
+    @abstractmethod
+    def plus(self, addend: Expression) -> Expression:
         pass
 
     @abstractmethod

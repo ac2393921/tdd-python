@@ -63,8 +63,28 @@ def test_identity_rate():
 
 def test_mixed_addition():
     five_bucks: Expression = Money.dollar(5)
-    tenFrancs: Expression = Money.franc(10)
+    ten_francs: Expression = Money.franc(10)
     bank: Bank = Bank()
     bank.add_rate("CHF", "USD", 2)
-    result: Money = bank.reduce(five_bucks.plus(tenFrancs), "USD")
+    result: Money = bank.reduce(five_bucks.plus(ten_francs), "USD")
     assert Money.dollar(10) == result
+
+
+def test_sum_plus_money():
+    five_bucks: Expression = Money.dollar(5)
+    ten_francs: Expression = Money.franc(10)
+    bank: Bank = Bank()
+    bank.add_rate("CHF", "USD", 2)
+    sum: Expression = Sum(five_bucks, ten_francs).plus(five_bucks)
+    result: Money = bank.reduce(sum, "USD")
+    assert Money.dollar(15) == result
+
+
+def test_sum_times():
+    five_bucks: Expression = Money.dollar(5)
+    ten_francs: Expression = Money.franc(10)
+    bank: Bank = Bank()
+    bank.add_rate("CHF", "USD", 2)
+    sum: Expression = Sum(five_bucks, ten_francs).times(2)
+    result: Money = bank.reduce(sum, "USD")
+    assert Money.dollar(20) == result
