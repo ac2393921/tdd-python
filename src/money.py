@@ -9,6 +9,10 @@ from src.exchanger import CurrencyExchanger
 
 class Expression(BaseModel, ABC):
     @abstractmethod
+    def plus(addend: Expression) -> Expression:
+        pass
+
+    @abstractmethod
     def reduce(self, bank: CurrencyExchanger, to: str) -> Money:
         pass
 
@@ -29,10 +33,10 @@ class Money(Expression):
     def amount(self) -> int:
         return self._amount
 
-    def times(self, multiplier: int) -> Money:
+    def times(self, multiplier: int) -> Expression:
         return Money(self._amount * multiplier, self._currency)
 
-    def plus(self, addend: Money) -> Expression:
+    def plus(self, addend: Expression) -> Expression:
         from .sum import Sum
 
         return Sum(self, addend)
